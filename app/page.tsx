@@ -1,9 +1,13 @@
-import Image from "next/image";
+import FeaturedProducts from "@/components/landing-page/featured-products";
+import HeroSection from "@/components/landing-page/hero-section";
+import RecentlyLaunchedProducts from "@/components/landing-page/recently-launched-Products";
 
 export default function Home() {
   return (
     <div>
-      <h1>let's get this shit done !</h1>
+      <HeroSection />
+      <FeaturedProducts />
+      <RecentlyLaunchedProducts />
     </div>
   );
 }
