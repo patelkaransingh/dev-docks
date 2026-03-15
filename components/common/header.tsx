@@ -3,9 +3,16 @@ import DevDocksLogo from "@/public/dev-docks.svg";
 import Image from "next/image";
 import { CompassIcon, FolderUp, HomeIcon, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  ClerkProvider,
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 
 export default function Header() {
-  const isSignedIn = true;
+  const isSignedIn = false;
   const Logo = () => {
     return (
       <Link href="/" className="flex items-center gap-2 group">
@@ -47,27 +54,26 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            {isSignedIn ? (
-              <>
-                <Button asChild>
-                  <Link href="/submit">
-                    <FolderUp className="size-4" />
-                    Submit Project
-                  </Link>
-                </Button>
-                {/* clerk user */}
-                <Button variant="ghost">
-                  <UserIcon className="size-5" />
-                </Button>
-              </>
-            ) : (
-              <>
+            <Show when="signed-out">
+              <SignInButton>
                 <Button variant="ghost" className="hover:bg-secondary">
                   Sign In
                 </Button>
+              </SignInButton>
+              <SignUpButton>
                 <Button>Sign Up</Button>
-              </>
-            )}
+              </SignUpButton>
+            </Show>
+            <Show when="signed-in">
+              <Button asChild>
+                <Link href="/submit">
+                  <FolderUp className="size-4" />
+                  Submit Project
+                </Link>
+              </Button>
+
+              <UserButton />
+            </Show>
           </div>
         </div>
       </div>
