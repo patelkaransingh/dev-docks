@@ -1,12 +1,4 @@
 1hr, 19min : 48
 
-cheat sheet link:
-https://innate-noodle-e82.notion.site/Next-js-16-Cheatsheet-295b184c73a880558713dfbe467ef618?pvs=143
-
-git link: 
-https://github.com/kulkarniankita/ibuiltthis
-
-
-
 //vscode: configure snippet
 Preferences: Configure User Snippets
