@@ -1,10 +1,11 @@
 import EmptyState from "@/components/common/empty-state";
 import SectionHeader from "@/components/common/section-header";
 import ProductCard from "@/components/products/product-card";
+import { getRecentlyLaunchedProducts } from "@/lib/products/products-select";
 import { CalendarClock, RocketIcon } from "lucide-react";
 
-export default function RecentlyLaunchedProducts() {
-  const recentlyLaunchedProducts = [];
+export default async function RecentlyLaunchedProducts() {
+  const recentlyLaunchedProducts = await getRecentlyLaunchedProducts();
 
   return (
     <div className="py-20">

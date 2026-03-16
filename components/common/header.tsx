@@ -1,18 +1,13 @@
 import Link from "next/link";
 import DevDocksLogo from "@/public/dev-docks.svg";
 import Image from "next/image";
-import { CompassIcon, FolderUp, HomeIcon, UserIcon } from "lucide-react";
+import { CompassIcon, FolderUp, HomeIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  ClerkProvider,
-  Show,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { Suspense } from "react";
+import Loading from "@/components/common/loading";
 
 export default function Header() {
-  const isSignedIn = false;
   const Logo = () => {
     return (
       <Link href="/" className="flex items-center gap-2 group">
@@ -23,7 +18,6 @@ export default function Header() {
   };
 
   return (
-    // header
     <header
       className="sticky top-0 z-50 border-b bg-background/95 
       backdrop-blur supports-backdrop-filter:bg-background/60"
@@ -54,26 +48,28 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Show when="signed-out">
-              <SignInButton>
-                <Button variant="ghost" className="hover:bg-secondary">
-                  Sign In
-                </Button>
-              </SignInButton>
-              <SignUpButton>
-                <Button>Sign Up</Button>
-              </SignUpButton>
-            </Show>
-            <Show when="signed-in">
-              <Button asChild>
-                <Link href="/submit">
-                  <FolderUp className="size-4" />
-                  Submit Project
-                </Link>
-              </Button>
+            <Suspense fallback={<Loading message="Loading auth..." />}>
+              <Show when="signed-out">
+                <SignInButton>
+                  <Button variant="ghost" className="hover:bg-secondary">
+                    Sign In
+                  </Button>
+                </SignInButton>
+                <SignUpButton>
+                  <Button>Sign Up</Button>
+                </SignUpButton>
+              </Show>
+              <Show when="signed-in">
+                <UserButton />
 
-              <UserButton />
-            </Show>
+                <Button variant="secondary" asChild>
+                  <Link href="/submit">
+                    <FolderUp className="size-4" />
+                    Submit Project
+                  </Link>
+                </Button>
+              </Show>
+            </Suspense>
           </div>
         </div>
       </div>
