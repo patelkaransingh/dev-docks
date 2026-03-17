@@ -6,12 +6,25 @@ import {
 } from "@/components/products/product-form-schema";
 import FormField from "@/components/forms/form-field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { useActionState, startTransition } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRight } from "lucide-react";
+import { addProductAction } from "@/lib/product-action";
+import Loading from "@/components/common/loading";
+import { error } from "console";
 
 export default function ProductForm() {
+  const initialState = {
+    success: false,
+    message: "",
+  };
+
+  const [state, formAction, isPending] = useActionState(
+    addProductAction,
+    initialState,
+  );
+
   const form = useForm<ProductFromValues>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
@@ -24,12 +37,23 @@ export default function ProductForm() {
     },
   });
 
-  function onSubmit(data: ProductFromValues) {
-    console.log(data);
-  }
+  const onSubmit = (data: ProductFromValues) => {
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, String(value));
+    });
+
+    startTransition(() => {
+      formAction(formData);
+    });
+  };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      // action={formAction}
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
       <FormField
         control={form.control}
         name="name"
@@ -75,8 +99,14 @@ export default function ProductForm() {
         required
       />
 
-      <Button type="submit" size="lg" className="w-full">
-        Submit Product <CircleArrowRight />
+      <Button type="submit" size="lg" className="w-full my-8">
+        {isPending ? (
+          <Loading message="Submitting..." />
+        ) : (
+          <span className="flex items-center gap-2">
+            Submit Product <CircleArrowRight />
+          </span>
+        )}
       </Button>
     </form>
   );

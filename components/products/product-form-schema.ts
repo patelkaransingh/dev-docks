@@ -17,7 +17,7 @@ export const productFormSchema = z.object({
 
   tagline: z
     .string()
-    .min(30, "A brief description of at least 30 characters.")
+    .min(10, "A brief description of at least 30 characters.")
     .max(200),
 
   description: z.string().max(2000).optional(),
